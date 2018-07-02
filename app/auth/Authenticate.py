@@ -27,7 +27,7 @@ class RegisterUser(MethodView):
         if response:
             return jsonify(response), 400
 
-        if user_category == "Driver":
+        if user_category == "driver":
             car_type = reg_info.get("car_type")
             reg_num = reg_info.get("reg_num")
             lic_num = reg_info.get("lic_num")
@@ -50,12 +50,12 @@ class RegisterUser(MethodView):
 class Login(MethodView):
     """ class to login a user """    
     def post(self):
-        """ Login a user """
+        """ user login """
         
-        post_data = request.get_json()
+        request_data = request.get_json()
 
-        userName = post_data.get('userName')
-        password = post_data.get('password')
+        userName = request_data.get('userName')
+        password = request_data.get('password')
 
         response = validate.login_validation(userName, password)
 
