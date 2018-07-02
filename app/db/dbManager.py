@@ -6,19 +6,14 @@ from pprint import pprint
 class DBConnection:
 	def __init__(self):
 		try:
-			self.con = psycopg2.connect(database="farooq", user="postgres", password="", host="localhost",
-			                            port="5432")
+			self.con = psycopg2.connect(database="farooq", user="postgres", password="12345", host="localhost",port="5432")
 			self.con.autocommit = True
 			self.cursor = self.con.cursor()
 			self.dict_cursor = self.con.cursor(cursor_factory=extra.DictCursor)
 		except Exception as ex:
 			pprint(ex)
 
-	def create_tables(self) -> object:
-		"""
-
-        :rtype: object
-        """
+	def create_tables(self):
 		print("I am here")
 		# status pending,approved, rejected
 		queries = (
@@ -35,15 +30,15 @@ class DBConnection:
 
 			"""
 			CREATE TABLE IF NOT EXISTS drivers (
-							driver_id SERIAL PRIMARY KEY,
-							firstName VARCHAR(50) NOT NULL,
-							secondName VARCHAR(50) NOT NULL,
-							userName VARCHAR(50) NOT NULL UNIQUE,
-							contact VARCHAR(15) NOT NULL UNIQUE,
-							carType VARCHAR(25) NOT NULL,
-							regNumber VARCHAR(25) NOT NULL UNIQUE,
-							licNumber VARCHAR(25) NOT NULL UNIQUE,
-							password VARCHAR(25) NOT NULL
+				driver_id SERIAL PRIMARY KEY,
+					firstName VARCHAR(50) NOT NULL,
+					secondName VARCHAR(50) NOT NULL,
+					userName VARCHAR(50) NOT NULL UNIQUE,
+					contact VARCHAR(15) NOT NULL UNIQUE,
+					carType VARCHAR(25) NOT NULL,
+					regNumber VARCHAR(25) NOT NULL UNIQUE,
+					licNumber VARCHAR(25) NOT NULL UNIQUE,
+					password VARCHAR(25) NOT NULL			
 						)
 						""",
 
@@ -83,6 +78,6 @@ class DBConnection:
 			self.cursor.execute(query)
 
 
-if __name__ == "__main__":
-	db = DBConnection()
-	db.create_tables()
+# if __name__ == "__main__":
+#  	db = DBConnection()
+#  	db.create_tables()
