@@ -3,7 +3,7 @@ from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.Validate import FieldValidation
 from app.Models import RideOffer, RideRequest
-from app.db.db_functions import add_new_offer, get_user_by_username
+from app.db.db_functions import add_new_offer, get_user_by_username, get_all_ride_offers, get_rideoffer_details, get_requests_to_rideOffer
 import datetime
 
 validate = FieldValidation()
@@ -20,10 +20,10 @@ class CreateOffer(MethodView):
         date = now.strftime("%Y-%m-%d %H:%M")
 
         loggedin_user = get_jwt_identity()
-        user = get_user_by_username(loggedin_user)
+        user = get_user_by_username(username=loggedin_user)
 
         driver_id = user[0]
-        driver_name = user[1] +""+user[2]
+        driver_name = user[1] + "" + user[2]
         location = offer_data.get("location")
         car_type = offer_data.get("car_type")
         plate_number = offer_data.get("plate_number")
@@ -36,12 +36,12 @@ class CreateOffer(MethodView):
                                              availability, cost_per_km)
         if response:
             return jsonify(response), 400
-       
+
         #storing entered request
         add_new_offer(
-            driver_id = driver_id,
-            date = date,
-            driverName = driver_name,
+            driver_id=driver_id,
+            date=date,
+            driverName=driver_name,
             location=location,
             carType=car_type,
             plateNumber=plate_number,
@@ -61,3 +61,58 @@ class CreateOffer(MethodView):
 
 
 class ViewAllOffers(MethodView):
+    @jwt_required
+    def get(self):
+        """function to get all offers"""
+        all_offers = get_all_ride_offers()
+        return jsonify({"All Offers": all_offers})
+
+
+class GetRideOfferDetails(MethodView):
+    @jwt_required
+    def get(self, ride_id):
+        if len(ride_id) > 0 and ride_id != None:
+            validation = validate.validate_entered_id(ride_id)
+            if validation:
+                return jsonify({"message": validation}), 400
+            ride = get_rideoffer_details(ride_id=ride_id)
+            return jsonify({"Ride Offer": ride}), 200
+
+class GetAllRequestsToRideOffer(MethodView):
+    @jwt_required
+    def get(self, ride_id):
+        if len(ride_id) > 0 and ride_id != None:
+            validation = validate.validate_entered_id(ride_id)
+            if validation:
+                return jsonify({"message":validation}),400
+            ride_requests = get_requests_to_rideOffer(ride_id)
+            return jsonify({"Ride Requests": ride_requests}), 200
+
+
+class RequestRide(MethodView):
+    @jwt_required
+    def post(self, location, destination, ride_id):
+        
+        validation = validate.validate_LocationDestination(location, destination)
+        validation2 = validate.validate_entered_id(ride_id)
+
+        if validation:
+            return jsonify({"message":validation}),400
+
+        if validation2:
+            return jsonify({"message":validation2}),400
+
+        now = datetime.datetime.now()
+        date = now.strftime("%Y-%m-%d %H:%M")
+
+        loggedin_user = get_jwt_identity()
+        user = get_user_by_username(username=loggedin_user)
+        
+
+        ride_id = ride_id
+        client_id = user[0]
+        client_name = user[1] + "" + user[2]
+        client_contact = user[4]
+        location = location
+        destination = destination
+        status = 'pending'

@@ -60,10 +60,16 @@ class DBConnection:
             )
             """,
 			"""
-            CREATE TABLE IF NOT EXISTS requests (
+            CREATE TABLE IF NOT EXISTS rideRequests (
                 request_id SERIAL PRIMARY KEY,
+                date VARCHAR(15) NUT NULL,
                 ride_id INTEGER NOT NULL,
                 client_id INTEGER NOT NULL,
+                client_name VARCHAR(50) NUT NULL,
+                client_contact VARCHAR(15) NOT NULL,
+                location VARCHAR(15) NOT NULL,
+                destination VARCHAR(15) NOT NULL,
+                status VARCHAR(10) NOT NULL,
                 FOREIGN KEY (ride_id)
                     REFERENCES rideOffers (ride_id)
                     ON UPDATE CASCADE ON DELETE CASCADE,
