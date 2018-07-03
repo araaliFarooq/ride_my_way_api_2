@@ -20,9 +20,9 @@ class Driver(User):
 
 
 class RideOffer:
-	def __init__(self, drive_name, location, car_type, plate_number, contact, availability, cost_per_km):
+	def __init__(self, driver_name, location, car_type, plate_number, contact, availability, cost_per_km):
 		"""Constructor to the RideOffer Class"""
-		self.driver_name = drive_name
+		self.driver_name = driver_name
 		self.location = location
 		self.car_type = car_type
 		self.plate_number = plate_number

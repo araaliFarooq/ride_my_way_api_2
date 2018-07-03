@@ -6,11 +6,12 @@ from app.db.db_functions import add_new_client, add_new_driver, get_user_by_user
 from app.Models import Driver, User
 
 validate = FieldValidation()
-auth = Blueprint("auth", __name__)
+auth_blueprint = Blueprint("auth_blueprint", __name__)
 
 
 class RegisterUser(MethodView):
     """ class to register a user """
+
     def post(self):
         """Create a new user"""
         reg_info = request.get_json()
@@ -22,8 +23,9 @@ class RegisterUser(MethodView):
         user_category = reg_info.get("user_category")
         password = reg_info.get("password")
 
-        response = validate.client_validation(firstName, secondName, userName, contact, user_category, password)
-        
+        response = validate.client_validation(firstName, secondName, userName,
+                                              contact, user_category, password)
+
         if response:
             return jsonify(response), 400
 
@@ -32,26 +34,58 @@ class RegisterUser(MethodView):
             reg_num = reg_info.get("reg_num")
             lic_num = reg_info.get("lic_num")
 
-            response2 = validate.driver_validation(firstName, secondName, userName, contact, user_category, car_type, reg_num, lic_num, password)
-            
+            response2 = validate.driver_validation(
+                firstName, secondName, userName, contact, user_category,
+                car_type, reg_num, lic_num, password)
+
             if response2:
-                  return jsonify(response2), 400      
+                return jsonify(response2), 400
             #database function to add new driver
-            add_new_driver(firstName=firstName, secondName=secondName, userName=userName, contact=contact, carType=car_type, reg_num=reg_num, lic_num=lic_num, password=password)
-            new_driver = Driver(firstName=firstName, secondName=secondName, userName=userName, contact=contact, user_category=user_category, car_type=car_type, reg_num=reg_num, lic_num=lic_num, password=password)
-            return jsonify({"New Driver":new_driver.__dict__}), 200
-                  
-              
+            add_new_driver(
+                firstName=firstName,
+                secondName=secondName,
+                userName=userName,
+                contact=contact,
+                carType=car_type,
+                reg_num=reg_num,
+                lic_num=lic_num,
+                password=password)
+            #new driver object
+            new_driver = Driver(
+                firstName=firstName,
+                secondName=secondName,
+                userName=userName,
+                contact=contact,
+                user_category=user_category,
+                car_type=car_type,
+                reg_num=reg_num,
+                lic_num=lic_num,
+                password=password)
+            return jsonify({"New Driver": new_driver.__dict__}), 200
+
         #database function to add new client
-        add_new_client(firstName=firstName, secondName=secondName, userName=userName, contact=contact, password=password)
-        new_client = User(firstName=firstName, secondName=secondName, userName=userName, contact=contact, user_category=user_category, password=password) 
-        return jsonify({"New Client":new_client.__dict__}), 200
+        add_new_client(
+            firstName=firstName,
+            secondName=secondName,
+            userName=userName,
+            contact=contact,
+            password=password)
+        new_client = User(
+            firstName=firstName,
+            secondName=secondName,
+            userName=userName,
+            contact=contact,
+            user_category=user_category,
+            password=password)
+        return jsonify({"New Client": new_client.__dict__}), 200
+
 
 class Login(MethodView):
-    """ class to login a user """    
+    """ class to login a user """
+
     def post(self):
         """ user login """
-        
+
         request_data = request.get_json()
 
         userName = request_data.get('userName')
@@ -61,17 +95,24 @@ class Login(MethodView):
 
         if response:
             return jsonify(response), 400
-        else:
-            user_token = {}
-            user = get_user_by_username(userName)
-            
-            access_token = create_access_token(identity=user)
+
+        user_token = {}
+        user = get_user_by_username(userName)
+
+        if user:
+            access_token = create_access_token(identity=userName)
             user_token["token"] = access_token
-            return jsonify({"msg":user_token}), 200
+            return jsonify({"message": user_token}), 200
 
-login_view = Login.as_view('login')
-registry_view = RegisterUser.as_view('register_user')
+        return jsonify({
+            "message": "Please Signup and try Logging in again"
+        }), 400
 
 
-auth.add_url_rule('/api/v1/user/login', view_func=login_view, methods=['POST'])
-auth.add_url_rule("/api/v1/user/register",  view_func=registry_view, methods=['POST'])
+login_view = Login.as_view('login_view')
+registry_view = RegisterUser.as_view('registery_view')
+
+auth_blueprint.add_url_rule(
+    '/api/v1/user/login', view_func=login_view, methods=['POST'])
+auth_blueprint.add_url_rule(
+    "/api/v1/user/register", view_func=registry_view, methods=['POST'])
