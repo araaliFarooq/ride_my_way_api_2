@@ -37,28 +37,40 @@ def get_user_by_username(username):
 
 def add_new_offer(driver_id, date, driverName, location, carType, plateNumber,
                   contact, availability, costPerKm):
+    """function to add a new ride offer"""              
     query = (
         """INSERT INTO rideOffers (driver_id, date, driverName, location, carType, plateNumber, contact, availability, costPerKm) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')""".
         format(driver_id, date, driverName, location, carType, plateNumber,
                   contact, availability, costPerKm))
     cursor.execute(query)
 
+def get_all_ride_offers():
+        """function to get all registered offers"""
+        cursor.execute("SELECT * from rideOffers")
+        all_offers = cursor.fetchall()
+        return all_offers
 
-# def get_a_single_user_request(self, request_id):
-#         """ function to retrieve a single request from the database for a logged in user"""
-#         self.cursor.execute("SELECT * FROM user_requests WHERE request_id = '{}'" .format(request_id))
-#         req = self.cursor.fetchall()
-#         if not req:
-#             return {"msg": "request doesn't exist"}
-#         return req
+def get_rideoffer_details(ride_id):
+        """ function to get details of a ride offer"""
+        cursor.execute("SELECT * FROM rideOffers WHERE ride_id = '{}'" .format(ride_id))
+        rows = cursor.fetchone()
+        if not rows:
+            return {"message": "Offer doesn't exist"}
+        return rows
 
-# def get_a_user_requests(self, username):
-#         """ function to fetch all requests for a signed in user """
-#         self.cursor.execute("SELECT * FROM user_requests WHERE request_owner = '{}'" .format(username))
-#         req = self.cursor.fetchall()
-#         if not req:
-#             return {"msg": "No requests yet"}
-#         return req
+def get_requests_to_rideOffer(ride_id):
+        """ function to get requests to a ride offer """
+        cursor.execute("SELECT * FROM rideRequest WHERE ride_id = '{}'" .format(ride_id))
+        requests = cursor.fetchall()
+        if not requests:
+            return {"message": "No requests exist"}
+        return requests
+
+def create_ride_request(date, ride_id, client_id, client_name, client_contact, location, destination, status):
+        query = (
+        """INSERT INTO rideRequests (date, ride_id, client_id, client_name, client_contact, location, destination, status) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}')""".
+        format(date, ride_id, client_id, client_name, client_contact, location, destination, status))
+        cursor.execute(query)
 
 # def update_user_request(self, title, desc, request_id):
 #         update_command = ("UPDATE user_requests SET request_title='{}', request_desc='{}' where request_id='{}'" .format(title, desc, int(request_id)))

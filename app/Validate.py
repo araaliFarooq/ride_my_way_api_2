@@ -18,6 +18,12 @@ class FieldValidation:
 			return jsonify({"message": "User category is missing"}), 400
 		if len(password) < 1:
 			return jsonify({"message": "Password is missing"}), 400
+		
+		if contact.isdigit():
+			pass	
+		else:			
+			return jsonify({"message": "Contact should only be in digits"}), 400
+    				
 
 	def driver_validation(self,  firstName, secondName, userName, contact, user_category, car_type, reg_num, lic_num, password):
 
@@ -64,3 +70,17 @@ class FieldValidation:
 			return jsonify({"message": "Working hours not stated"}), 400
 		if len(costPerKm) < 1:
 			return jsonify({"message": "Charge per Km not stated"}), 400
+
+	def validate_entered_id(self,id):
+		if isinstance(id, int):
+			pass
+		return jsonify({"message": "The Id passed should be an Interger"}), 400
+		if id.isalpha():
+			return jsonify({"message": "The Id passed should not be a letter"}), 400
+
+	def validate_LocationDestination(self, location,destination):
+		if len(location) < 1 or len(destination) < 1:
+			return jsonify({"message": "Please provide both your location and destination"}), 400
+		if destination.isalnum() or location.isalnum:
+			return jsonify({"message": "Location or Destination should not have numbers"}), 400
+				
