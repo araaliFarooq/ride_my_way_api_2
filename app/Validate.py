@@ -72,11 +72,10 @@ class FieldValidation:
 			return jsonify({"message": "Charge per Km not stated"}), 400
 
 	def validate_entered_id(self,id):
-		if isinstance(id, int):
-			pass
-		return jsonify({"message": "The Id passed should be an Interger"}), 400
-		if id.isalpha():
-			return jsonify({"message": "The Id passed should not be a letter"}), 400
+		try:
+			ride_id = int(id)
+		except ValueError:
+			return jsonify({"message": "Id should be an interger"}), 400
 
 	def validate_LocationDestination(self, location,destination):
 		if len(location) < 1 or len(destination) < 1:

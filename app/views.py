@@ -24,7 +24,7 @@ class CreateOffer(MethodView):
         user = get_user_by_username(username=loggedin_user)
 
         driver_id = user[0]
-        driver_name = user[1] + "" + user[2]
+        driver_name = user[1] + " " + user[2]
         location = offer_data.get("location")
         car_type = offer_data.get("car_type")
         plate_number = offer_data.get("plate_number")
@@ -73,9 +73,10 @@ class GetRideOfferDetails(MethodView):
     @jwt_required
     def get(self, ride_id):
         if len(ride_id) > 0 and ride_id != None:
+            
             validation = validate.validate_entered_id(ride_id)
             if validation:
-                return jsonify({"message": validation}), 400
+                return validation
             ride = get_rideoffer_details(ride_id=ride_id)
             return jsonify({"Ride Offer": ride}), 200
 
@@ -133,6 +134,7 @@ class SendRideRequest(MethodView):
 
 
 class HandleRideRequest(MethodView):
+    @jwt_required
     def put(self, status, request_id, ride_id):
         """function to reject or accept a ride request""" 
         validation = validate.validate_status(status)
@@ -162,6 +164,28 @@ class HandleRideRequest(MethodView):
 
 
 create_offer_view = CreateOffer.as_view('create_offer_view')
+view_offers_view = ViewAllOffers.as_view('view_offers_view')
+get_offerdetails_view = GetRideOfferDetails.as_view('get_offerdetails_view')
+get_requests_to_offer_view = GetAllRequestsToRideOffer.as_view('get_requests_to_offer_view')
+send_ride_request_view = SendRideRequest.as_view('send_ride_request_view')
+handle_ride_request_view = HandleRideRequest.as_view('handle_ride_request_view')
+
+# endpoint to create ride offes
+ride_blueprint.add_url_rule(
+    '/api/v1/rides/create_offer', view_func=create_offer_view, methods=['POST'])
 
 ride_blueprint.add_url_rule(
-    '/api/v1/rides/create', view_func=create_offer_view, methods=['POST'])
+    '/api/v1/rides/view_all_offers', view_func=view_offers_view, methods=['GET'])
+
+ride_blueprint.add_url_rule(
+    '/api/v1/rides/view_single_offer/<ride_id>', view_func=get_offerdetails_view, methods=['GET'])
+
+ride_blueprint.add_url_rule(
+    '/api/v1/requests/all_requests/<ride_id>', view_func=get_requests_to_offer_view, methods=['POST'])
+
+ride_blueprint.add_url_rule(
+    '/api/v1/rides/send_request/<location>/<destination>/<ride_id>', view_func=send_ride_request_view, methods=['POST'])
+
+ride_blueprint.add_url_rule(
+    '/api/v1/rides/requests/status/<status>/<request_id>/<ride_id>', view_func=create_offer_view, methods=['POST'])
+
