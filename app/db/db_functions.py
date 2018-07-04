@@ -66,21 +66,17 @@ def get_requests_to_rideOffer(ride_id):
             return {"message": "No requests exist"}
         return requests
 
-def create_ride_request(date, ride_id, client_id, client_name, client_contact, location, destination, status):
+def send_ride_request(date, ride_id, client_id, client_name, client_contact, location, destination, status):
+        """function to submit a request made for a ride"""
         query = (
-        """INSERT INTO rideRequests (date, ride_id, client_id, client_name, client_contact, location, destination, status) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}')""".
+        """INSERT INTO rideRequests (date, ride_id, client_id, client_name, client_contact, location, destination, status) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')""".
         format(date, ride_id, client_id, client_name, client_contact, location, destination, status))
         cursor.execute(query)
 
-# def update_user_request(self, title, desc, request_id):
-#         update_command = ("UPDATE user_requests SET request_title='{}', request_desc='{}' where request_id='{}'" .format(title, desc, int(request_id)))
-#         self.cursor.execute(update_command)
-
-# def get_all_app_requests(self):
-#         self.cursor.execute("SELECT * from user_requests")
-#         all_rows = self.cursor.fetchall()
-#         return all_rows
-
-# def update_request_status(self, request_id, request_status):
-#         update_command = ("UPDATE user_requests SET request_status='{}' where request_id='{}'" .format(request_status, int(request_id)))
-#         self.cursor.execute(update_command)
+def handle_ride_request(self, status, request_id, ride_id):
+        """function to accept or reject ride requests"""
+        update_command = ("""UPDATE rideRequests SET status = '{}' where request_id = '{}' and ride_id = '{}'""" .format(status, request_id, ride_id))
+        update = cursor.execute(update_command)
+        if update:
+            return {"Request status": status}
+            

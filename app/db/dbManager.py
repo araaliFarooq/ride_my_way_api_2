@@ -14,7 +14,6 @@ class DBConnection:
 			pprint(ex)
 
 	def create_tables(self):
-		print("I am here")
 		# status pending,approved, rejected
 		queries = (
 			"""
@@ -62,10 +61,10 @@ class DBConnection:
 			"""
             CREATE TABLE IF NOT EXISTS rideRequests (
                 request_id SERIAL PRIMARY KEY,
-                date VARCHAR(15) NUT NULL,
+                date VARCHAR(15) NOT NULL,
                 ride_id INTEGER NOT NULL,
                 client_id INTEGER NOT NULL,
-                client_name VARCHAR(50) NUT NULL,
+                client_name VARCHAR(50) NOT NULL,
                 client_contact VARCHAR(15) NOT NULL,
                 location VARCHAR(15) NOT NULL,
                 destination VARCHAR(15) NOT NULL,
@@ -75,11 +74,10 @@ class DBConnection:
                     ON UPDATE CASCADE ON DELETE CASCADE,
                 FOREIGN KEY (client_id)
                     REFERENCES clients (client_id)
-                    ON UPDATE CASCADE ON DELETE CASCADE,
-                status VARCHAR(10) NOT NULL
+                    ON UPDATE CASCADE ON DELETE CASCADE
             )
             """
-		)
+        )
 		for query in queries:
 			self.cursor.execute(query)
 
