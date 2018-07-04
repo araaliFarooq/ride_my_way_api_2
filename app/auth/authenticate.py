@@ -1,9 +1,9 @@
 from flask import request, jsonify, Blueprint
 from flask.views import MethodView
-from app.Validate import FieldValidation
+from app.validate import FieldValidation
 from flask_jwt_extended import create_access_token
 from app.db.db_functions import add_new_client, add_new_driver, get_user_by_username
-from app.Models import Driver, User
+from app.models import Driver, User
 
 validate = FieldValidation()
 auth_blueprint = Blueprint("auth_blueprint", __name__)

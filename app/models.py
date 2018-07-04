@@ -30,11 +30,11 @@ class RideOffer:
 		self.availability = availability
 		self.cost_per_km = cost_per_km
 
-	def offer_to_Json(self):
+	def toJson(self):
 		"""Function to give the RideOffer model ability to be jsonified """
 		offer = dict(
-			offerer_name=self.driver_name,
-			offerer_contact=self.contact,
+			driver=self.driver_name,
+			contact=self.contact,
 			car_type=self.car_type,
 			offerer_location=self.location,
 			plate_number=self.plate_number,
@@ -58,13 +58,13 @@ class RideRequest:
 
 
 
-	def RequestoJson(self):
+	def toJson(self):
 		"""Function to give the RideRequest model ability to be jsonified """
 		request = dict(
 			id=self.id,
-			requester_name=self.passenger_name,
-			requester_contact=self.contact,
-			requester_location=self.location,
+			passenger=self.passenger_name,
+			contact=self.contact,
+			location=self.location,
 
 		)
 		return request

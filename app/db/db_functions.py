@@ -75,10 +75,6 @@ def send_ride_request(date, ride_id, client_id, client_name, client_contact, loc
 
 def handle_ride_request(status, request_id, ride_id):
         """function to accept or reject ride requests"""
-        update_command = ("""UPDATE rideRequests SET status = '{}' where request_id = '{}' and ride_id = '{}'""" .format(status, request_id, ride_id))
-        update = cursor.execute(update_command)
-        if not update:
-            return {"Request status": update}
-
-        return{"Request Status": status}
-            
+        query = ("""UPDATE rideRequests SET status = '{}' where request_id = '{}' and ride_id = '{}'""" .format(status, request_id, ride_id))
+        cursor.execute(query)
+       
