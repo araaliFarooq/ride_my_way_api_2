@@ -3,7 +3,7 @@ from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.Validate import FieldValidation
 from app.Models import RideOffer, RideRequest
-from app.db.db_functions import add_new_offer, get_user_by_username, get_all_ride_offers, get_rideoffer_details, get_requests_to_rideOffer, send_ride_request
+from app.db.db_functions import add_new_offer, get_user_by_username, get_all_ride_offers, get_rideoffer_details, get_requests_to_rideOffer, send_ride_request, handle_ride_request
 import datetime
 
 validate = FieldValidation()
@@ -144,7 +144,21 @@ class HandleRideRequest(MethodView):
         elif validation2:
             return jsonify({"message": validation2}), 400
         elif validation3:
-            return jsonify({"message": validation3}), 400    
+            return jsonify({"message": validation3}), 400
+
+        status = status
+        ride_id = ride_id
+        request_id = request_id
+
+        if status == "accept":
+            status_handle = handle_ride_request(status = 'Accepted', request_id = request_id, ride_id = ride_id)
+
+        elif status == "reject":
+            status_handle = handle_ride_request(status = 'Rejected', request_id = request_id, ride_id = ride_id)
+
+        return jsonify({"message": status_handle}), 200        
+        
+           
 
 
 create_offer_view = CreateOffer.as_view('create_offer_view')
