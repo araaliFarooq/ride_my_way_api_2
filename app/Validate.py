@@ -84,3 +84,8 @@ class FieldValidation:
 		if destination.isalnum() or location.isalnum:
 			return jsonify({"message": "Location or Destination should not have numbers"}), 400
 				
+	def validate_status(self, status):
+		if len(location) < 1:
+			return jsonify({"message": "No status is provided"}), 400
+		if status.isalnum():
+			return jsonify({"message": "Status should not have numbers"}), 400
