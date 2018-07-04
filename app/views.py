@@ -1,8 +1,8 @@
 from flask import jsonify, request, Blueprint
 from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity, jwt_required
-from app.Validate import FieldValidation
-from app.Models import RideOffer, RideRequest
+from app.validate import FieldValidation
+from app.models import RideOffer, RideRequest
 from app.db.db_functions import add_new_offer, get_user_by_username, get_all_ride_offers, get_rideoffer_details, get_requests_to_rideOffer, send_ride_request, handle_ride_request
 import datetime
 
@@ -87,7 +87,7 @@ class GetAllRequestsToRideOffer(MethodView):
         if len(ride_id) > 0 and ride_id != None:
             validation = validate.validate_entered_id(ride_id)
             if validation:
-                return jsonify({"message": validation}), 400
+                return validation
             ride_requests = get_requests_to_rideOffer(ride_id)
             return jsonify({"Ride Requests": ride_requests}), 200
 
@@ -101,10 +101,10 @@ class SendRideRequest(MethodView):
         validation2 = validate.validate_entered_id(ride_id)
 
         if validation:
-            return jsonify({"message": validation}), 400
+            return validation
 
         if validation2:
-            return jsonify({"message": validation2}), 400
+            return validation2
 
         now = datetime.datetime.now()
         date = now.strftime("%Y-%m-%d %H:%M")
@@ -114,11 +114,11 @@ class SendRideRequest(MethodView):
 
         ride_id = ride_id
         client_id = user[0]
-        client_name = user[1] + "" + user[2]
+        client_name = user[1] + " " + user[2]
         client_contact = user[4]
         location = location
         destination = destination
-        status = 'pending'
+        status1 = 'pending'
 
         send_ride_request(
             date=date,
@@ -128,7 +128,7 @@ class SendRideRequest(MethodView):
             client_contact=client_contact,
             location=location,
             destination=destination,
-            status=status)
+            status=status1)
 
         return jsonify({"Ride Requests": "Your Request has been sent"}), 200
 
@@ -142,23 +142,23 @@ class HandleRideRequest(MethodView):
         validation3 = validate.validate_entered_id(ride_id)
 
         if validation:
-            return jsonify({"message": validation}), 400
+            return validation
         elif validation2:
-            return jsonify({"message": validation2}), 400
+            return validation2
         elif validation3:
-            return jsonify({"message": validation3}), 400
+            return validation3
 
         status = status
         ride_id = ride_id
         request_id = request_id
 
         if status == "accept":
-            status_handle = handle_ride_request(status = 'Accepted', request_id = request_id, ride_id = ride_id)
+            handle_ride_request(status = 'Accepted', request_id = request_id, ride_id = ride_id)
 
         elif status == "reject":
-            status_handle = handle_ride_request(status = 'Rejected', request_id = request_id, ride_id = ride_id)
+            handle_ride_request(status = 'Rejected', request_id = request_id, ride_id = ride_id)
 
-        return jsonify({"message": status_handle}), 200        
+        return jsonify({"Request":status }), 200        
         
            
 
@@ -181,11 +181,11 @@ ride_blueprint.add_url_rule(
     '/api/v1/rides/view_single_offer/<ride_id>', view_func=get_offerdetails_view, methods=['GET'])
 
 ride_blueprint.add_url_rule(
-    '/api/v1/requests/all_requests/<ride_id>', view_func=get_requests_to_offer_view, methods=['POST'])
+    '/api/v1/requests/all_requests/<ride_id>', view_func=get_requests_to_offer_view, methods=['GET'])
 
 ride_blueprint.add_url_rule(
     '/api/v1/rides/send_request/<location>/<destination>/<ride_id>', view_func=send_ride_request_view, methods=['POST'])
 
 ride_blueprint.add_url_rule(
-    '/api/v1/rides/requests/status/<status>/<request_id>/<ride_id>', view_func=create_offer_view, methods=['POST'])
+    '/api/v1/rides/requests/status/<status>/<request_id>/<ride_id>', view_func=handle_ride_request_view, methods=['PUT'])
 
