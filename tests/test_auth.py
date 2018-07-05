@@ -116,6 +116,11 @@ class Test_auth(unittest.TestCase):
 
     def test_user_login_successful(self):
         """ Test for successful login """
+        response2 = self.app.post("/api/v1/user/register",
+                                 content_type='application/json',
+                                 data=json.dumps(dict(firstName="Natie", secondName="kyra", userName="araali",
+                                                      contact="0888887676", user_category="driver", password="farooq", car_type="rover", reg_num="uab1234", lic_num="4567789999"),)
+                                 )
 
         response = self.app.post(
             "/api/v1/user/login",
