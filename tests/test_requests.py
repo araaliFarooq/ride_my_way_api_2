@@ -2,7 +2,7 @@ import unittest
 from app import views
 from run import app
 import json
-from tests import BaseTestCase
+
 
 
 class Test_Requests(unittest.TestCase):
@@ -32,9 +32,9 @@ class Test_Requests(unittest.TestCase):
         self.assertEquals(response.status_code, 201)
     
     
-    def test_create_ride_offer(self):
+    # def test_create_ride_offer(self):
         
-        token = BaseTestCase().fetch_token()
-        resp = BaseTestCase().add_ride()
-        data = json.loads(resp.data.decode())
-        self.assertEqual(resp.status_code,200)
+    #     token = BaseTestCase().fetch_token()
+    #     resp = BaseTestCase().add_ride()
+    #     data = json.loads(resp.data.decode())
+    #     self.assertEqual(resp.status_code,200)

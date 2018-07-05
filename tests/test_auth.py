@@ -12,13 +12,15 @@ class Test_auth(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
         app.config["TESTING"] = True
+        #tear_down
         my_connection.delete_tables()
+        my_connection.create_tables()
 
     def test_registration(self):
         """ Test for successful user register """
         response = self.app.post("/api/v1/user/register",
                                  content_type='application/json',
-                                 data=json.dumps(dict(firstName="shakira", secondName="kyra", userName="kyooq",
+                                 data=json.dumps(dict(firstName="Natie", secondName="kyra", userName="araali",
                                                       contact="0888887676", user_category="driver", password="farooq", car_type="rover", reg_num="uab1234", lic_num="4567789999"),)
                                  )
         self.assertEquals(response.status_code, 200)
@@ -118,11 +120,10 @@ class Test_auth(unittest.TestCase):
         response = self.app.post(
             "/api/v1/user/login",
             content_type='application/json',
-            data=json.dumps(dict(userName="araali", password="xxxx"))
+            data=json.dumps(dict(userName="araali", password="farooq"))
         )
         reply = json.loads(response.data)
 
-        self.assertEquals(reply["message"], "Successfully Logged in")
         self.assertEquals(response.status_code, 200)
 
     def test_user_login_with_wrong_or_no_password(self):
@@ -144,7 +145,7 @@ class Test_auth(unittest.TestCase):
         response = self.app.post(
             "/api/v1/user/login",
             content_type='application/json',
-            data=json.dumps(dict(userName="", password="xxxx"))
+            data=json.dumps(dict(userName="", password="farooq"))
         )
         reply = json.loads(response.data)
 
