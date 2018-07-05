@@ -104,9 +104,7 @@ class Login(MethodView):
             user_token["token"] = access_token
             return jsonify({"message": user_token}), 200
 
-        return jsonify({
-            "message": "Please Signup and try Logging in again"
-        }), 400
+        return response
 
 
 login_view = Login.as_view('login_view')
