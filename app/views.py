@@ -15,7 +15,7 @@ class CreateOffer(MethodView):
 
     @jwt_required
     def post(self):
-        #get entered data
+        # get entered data
         offer_data = request.get_json()
         now = datetime.datetime.now()
         date = now.strftime("%Y-%m-%d %H:%M")
@@ -31,14 +31,14 @@ class CreateOffer(MethodView):
         contact = offer_data.get("contact")
         availability = offer_data.get("availability")
         cost_per_km = offer_data.get("cost_per_km")
-        #validation
+        # validation
         response = validate.offer_validation(driver_name, location, car_type,
                                              plate_number, contact,
                                              availability, cost_per_km)
         if response:
             return jsonify(response), 400
 
-        #storing entered request
+        # storing entered request
         add_new_offer(
             driver_id=driver_id,
             date=date,
@@ -73,7 +73,7 @@ class GetRideOfferDetails(MethodView):
     @jwt_required
     def get(self, ride_id):
         if len(ride_id) > 0 and ride_id != None:
-            
+
             validation = validate.validate_entered_id(ride_id)
             if validation:
                 return validation
@@ -136,7 +136,7 @@ class SendRideRequest(MethodView):
 class HandleRideRequest(MethodView):
     @jwt_required
     def put(self, status, request_id, ride_id):
-        """function to reject or accept a ride request""" 
+        """function to reject or accept a ride request"""
         validation = validate.validate_status(status)
         validation2 = validate.validate_entered_id(request_id)
         validation3 = validate.validate_entered_id(ride_id)
@@ -153,22 +153,24 @@ class HandleRideRequest(MethodView):
         request_id = request_id
 
         if status == "accept":
-            handle_ride_request(status = 'Accepted', request_id = request_id, ride_id = ride_id)
+            handle_ride_request(status='Accepted',
+                                request_id=request_id, ride_id=ride_id)
 
         elif status == "reject":
-            handle_ride_request(status = 'Rejected', request_id = request_id, ride_id = ride_id)
+            handle_ride_request(status='Rejected',
+                                request_id=request_id, ride_id=ride_id)
 
-        return jsonify({"Request":status }), 200        
-        
-           
+        return jsonify({"Request": status}), 200
 
 
 create_offer_view = CreateOffer.as_view('create_offer_view')
 view_offers_view = ViewAllOffers.as_view('view_offers_view')
 get_offerdetails_view = GetRideOfferDetails.as_view('get_offerdetails_view')
-get_requests_to_offer_view = GetAllRequestsToRideOffer.as_view('get_requests_to_offer_view')
+get_requests_to_offer_view = GetAllRequestsToRideOffer.as_view(
+    'get_requests_to_offer_view')
 send_ride_request_view = SendRideRequest.as_view('send_ride_request_view')
-handle_ride_request_view = HandleRideRequest.as_view('handle_ride_request_view')
+handle_ride_request_view = HandleRideRequest.as_view(
+    'handle_ride_request_view')
 
 # endpoint to create ride offes
 ride_blueprint.add_url_rule(
@@ -188,4 +190,3 @@ ride_blueprint.add_url_rule(
 
 ride_blueprint.add_url_rule(
     '/api/v1/rides/requests/status/<status>/<request_id>/<ride_id>', view_func=handle_ride_request_view, methods=['PUT'])
-

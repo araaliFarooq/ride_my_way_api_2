@@ -1,22 +1,28 @@
 import psycopg2
-import psycopg2.extras as extra
 from pprint import pprint
+from app import app
+# from config import app_config
 
 
 class DBConnection:
-	def __init__(self):
-		try:
-			self.con = psycopg2.connect(database="farooq", user="postgres", password="12345", host="localhost",port="5432")
-			self.con.autocommit = True
-			self.cursor = self.con.cursor()
-			self.dict_cursor = self.con.cursor(cursor_factory=extra.DictCursor)
-		except Exception as ex:
-			pprint(ex)
+    def __init__(self):
+        if app.config['TESTING']:
+            print("Testing")
+            self.con = psycopg2.connect(
+                database="apitests", user="postgres", password="12345", host="localhost", port="5432")
+        else:
+            print("Development")
+            self.con = psycopg2.connect(
+                database="farooq", user="postgres", password="12345", host="localhost", port="5432")
 
-	def create_tables(self):
-		# status pending,approved, rejected
-		queries = (
-			"""
+        self.con.autocommit = True
+        self.cursor = self.con.cursor()
+        # self.dict_cursor = self.con.cursor(cursor_factory=extra.DictCursor)
+
+    def create_tables(self):
+
+        queries = (
+            """
             CREATE TABLE IF NOT EXISTS clients (
                 client_id SERIAL PRIMARY KEY,
                 firstName VARCHAR(50) NOT NULL,
@@ -27,7 +33,7 @@ class DBConnection:
             )
             """,
 
-			"""
+            """
 			CREATE TABLE IF NOT EXISTS drivers (
 				driver_id SERIAL PRIMARY KEY,
 					firstName VARCHAR(50) NOT NULL,
@@ -41,7 +47,7 @@ class DBConnection:
 						)
 						""",
 
-			"""
+            """
             CREATE TABLE IF NOT EXISTS rideOffers (
                 ride_id SERIAL PRIMARY KEY,
                 driver_id INTEGER NOT NULL,
@@ -58,7 +64,7 @@ class DBConnection:
                     ON UPDATE CASCADE ON DELETE CASCADE
             )
             """,
-			"""
+            """
             CREATE TABLE IF NOT EXISTS rideRequests (
                 request_id SERIAL PRIMARY KEY,
                 date timestamp NOT NULL,
@@ -78,8 +84,29 @@ class DBConnection:
             )
             """
         )
-		for query in queries:
-			self.cursor.execute(query)
+        for query in queries:
+            self.cursor.execute(query)
+
+    def delete_tables(self):
+
+        delete_queries = (
+            """
+            DROP TABLE IF EXISTS clients CASCADE
+            """,
+
+            """
+			DROP TABLE IF EXISTS drivers CASCADE
+						""",
+
+            """
+            DROP TABLE IF EXISTS rideOffers CASCADE
+            """,
+            """
+            DROP TABLE IF EXISTS rideRequests CASCADE
+            """
+        )
+        for query in delete_queries:
+            self.cursor.execute(query)
 
 
 # if __name__ == "__main__":
