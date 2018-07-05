@@ -1,9 +1,9 @@
 from flask import request, jsonify, Blueprint
 from flask.views import MethodView
 from app.validate import FieldValidation
-from flask_jwt_extended import create_access_token
 from app.db.db_functions import add_new_client, add_new_driver, get_user_by_username
 from app.models import Driver, User
+from flask_jwt_extended import create_access_token
 
 validate = FieldValidation()
 auth_blueprint = Blueprint("auth_blueprint", __name__)
@@ -27,7 +27,7 @@ class RegisterUser(MethodView):
                                               contact, user_category, password)
 
         if response:
-            return jsonify(response), 400
+            return response
 
         if user_category == "driver":
             car_type = reg_info.get("car_type")
@@ -39,8 +39,8 @@ class RegisterUser(MethodView):
                 car_type, reg_num, lic_num, password)
 
             if response2:
-                return jsonify(response2), 400
-            #database function to add new driver
+                return response2
+            # database function to add new driver
             add_new_driver(
                 firstName=firstName,
                 secondName=secondName,
@@ -50,7 +50,7 @@ class RegisterUser(MethodView):
                 reg_num=reg_num,
                 lic_num=lic_num,
                 password=password)
-            #new driver object
+            # new driver object
             new_driver = Driver(
                 firstName=firstName,
                 secondName=secondName,
@@ -63,7 +63,7 @@ class RegisterUser(MethodView):
                 password=password)
             return jsonify({"New Driver": new_driver.__dict__}), 200
 
-        #database function to add new client
+        # database function to add new client
         add_new_client(
             firstName=firstName,
             secondName=secondName,
@@ -87,19 +87,19 @@ class Login(MethodView):
         """ user login """
 
         request_data = request.get_json()
-
         userName = request_data.get('userName')
         password = request_data.get('password')
 
         response = validate.login_validation(userName, password)
 
         if response:
-            return jsonify(response), 400
+            return response
 
         user_token = {}
         user = get_user_by_username(userName)
 
         if user:
+
             access_token = create_access_token(identity=userName)
             user_token["token"] = access_token
             return jsonify({"message": user_token}), 200

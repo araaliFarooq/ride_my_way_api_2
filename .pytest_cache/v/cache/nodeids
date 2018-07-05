@@ -1,0 +1,15 @@
+[
+  "tests/test_auth.py::Test_auth::test_registration",
+  "tests/test_auth.py::Test_auth::test_registration_with_empty_car_type",
+  "tests/test_auth.py::Test_auth::test_registration_with_empty_contact",
+  "tests/test_auth.py::Test_auth::test_registration_with_empty_first_name",
+  "tests/test_auth.py::Test_auth::test_registration_with_empty_licence_number",
+  "tests/test_auth.py::Test_auth::test_registration_with_empty_password",
+  "tests/test_auth.py::Test_auth::test_registration_with_empty_registration_number",
+  "tests/test_auth.py::Test_auth::test_registration_with_empty_username",
+  "tests/test_auth.py::Test_auth::test_user_login_successful",
+  "tests/test_auth.py::Test_auth::test_user_login_with_wrong_or_no_password",
+  "tests/test_auth.py::Test_auth::test_user_login_with_wrong_or_no_username",
+  "tests/test_requests.py::Test_Requests::test_create_ride_offer",
+  "tests/test_requests.py::Test_Requests::test_request_to_join_offers"
+]

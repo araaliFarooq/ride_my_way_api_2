@@ -1,0 +1,6 @@
+{
+  "tests/test_auth.py::Test_auth::test_registration": true,
+  "tests/test_auth.py::Test_auth::test_user_login_successful": true,
+  "tests/test_requests.py::Test_Requests::test_create_ride_offer": true,
+  "tests/test_requests.py::Test_Requests::test_request_to_join_offers": true
+}
