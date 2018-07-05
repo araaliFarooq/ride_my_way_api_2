@@ -1,0 +1,12 @@
+{
+  "tests/test_adding_ride_offer.py::Test_Ride_Offers::test_adding_offer": true,
+  "tests/test_adding_ride_offer.py::Test_Ride_Offers::test_adding_offer_with_empty_availability": true,
+  "tests/test_adding_ride_offer.py::Test_Ride_Offers::test_adding_offer_with_empty_car_type": true,
+  "tests/test_adding_ride_offer.py::Test_Ride_Offers::test_adding_offer_with_empty_contact": true,
+  "tests/test_adding_ride_offer.py::Test_Ride_Offers::test_adding_offer_with_empty_cost_per_km": true,
+  "tests/test_adding_ride_offer.py::Test_Ride_Offers::test_adding_offer_with_empty_driver_name": true,
+  "tests/test_adding_ride_offer.py::Test_Ride_Offers::test_adding_offer_with_empty_location": true,
+  "tests/test_adding_ride_offer.py::Test_Ride_Offers::test_adding_offer_with_empty_plate_number": true,
+  "tests/test_requests.py::Test_Requests::test_create_ride_offer": true,
+  "tests/test_requests.py::Test_Requests::test_request_to_join_offers": true
+}
