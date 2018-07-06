@@ -1,0 +1,8 @@
+{
+  "tests/test_user_views.py::Test_Requests::test_accepting_request": true,
+  "tests/test_user_views.py::Test_Requests::test_create_ride_offer": true,
+  "tests/test_user_views.py::Test_Requests::test_get_all_requests_to_ride_offer": true,
+  "tests/test_user_views.py::Test_Requests::test_get_request_status": true,
+  "tests/test_user_views.py::Test_Requests::test_rejecting_request": true,
+  "tests/test_user_views.py::Test_Requests::test_request_to_join_offers": true
+}

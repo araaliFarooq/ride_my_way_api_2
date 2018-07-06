@@ -1,5 +1,6 @@
 """validating user input fields"""
 from flask import jsonify
+import re
 
 
 class FieldValidation:
@@ -51,7 +52,7 @@ class FieldValidation:
 
     def offer_validation(self, driverName, location, carType, plateNumber, contact, availability, costPerKm):
 
-        if not driverName:
+        if not driverName :
             return jsonify({"message": "drivers name is missing"}), 400
         if not location:
             return jsonify({"message": "location is missing"}), 400

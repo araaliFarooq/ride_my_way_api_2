@@ -13,7 +13,7 @@ class DBConnection:
         else:
             print("Development")
             self.con = psycopg2.connect(
-                database="farooq", user="postgres", password="12345", host="localhost", port="5432")
+                database="apitests", user="postgres", password="12345", host="localhost", port="5432")
 
         self.con.autocommit = True
         self.cursor = self.con.cursor()
