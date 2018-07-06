@@ -15,17 +15,19 @@ This is an API for a transportation application that allows users (Drivers) to c
 - Request to join a ride offer
 - Create and add a ride offer.
 - View a particular ride offer.
+- Accept or reject a ride request.
+- View all rerquests to a specific ride offer.
 
 ## Other features
 - View request status
 
 ## Tools Used
-[Flask](http://flask.pocoo.org/) - web microframework for Python
-[PostgreSQL](https://www.postgresql.org/)- Open source relational database
+- [Flask](http://flask.pocoo.org/) - web microframework for Python
+- [PostgreSQL](https://www.postgresql.org/)- Open source relational database
 
 ## Requirements
-Python 2.7.x - 3.x.x+
-
+Python 3.x.x+
+ 
 ## Run (Use) on your local machine
 First clone the repository
 ```sh
@@ -42,7 +44,7 @@ First clone the repository
 #### Endpoints to create a user account and login into the application
 HTTP Method|End point | Public Access|Action
 -----------|----------|--------------|------
-POST | /api/v1/user/register | True | Create an account
+POST | /api/v1/user/register | True | Create a user account
 POST | /api/v1/user/login | True | Login a user
 
 #### Endpoints to create, read user ride offers and requests
