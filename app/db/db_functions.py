@@ -61,10 +61,11 @@ def get_rideoffer_details(ride_id):
         return {"message": "Offer doesn't exist"}
     return rows
 
+
 def get_requests_to_rideOffer(ride_id):
     """ function to get requests to a ride offer """
     cursor.execute(
-        "SELECT * FROM rideRequest WHERE ride_id = '{}'" .format(ride_id))
+        "SELECT * FROM rideRequests WHERE ride_id = '{}'" .format(ride_id))
     requests = cursor.fetchall()
     if not requests:
         return {"message": "No requests exist"}
@@ -84,5 +85,18 @@ def handle_ride_request(status, request_id, ride_id):
     query = ("""UPDATE rideRequests SET status = '{}' where request_id = '{}' and ride_id = '{}'""" .format(
         status, request_id, ride_id))
     cursor.execute(query)
+
+
+def get_requests_status(client_id):
+    """ function to get requests status """
+    cursor.execute(
+        "SELECT rideRequests.date, rideRequests.location, rideRequests.destination, rideOffers.driverName, rideOffers.carType, rideOffers.plateNumber, rideOffers.contact, rideRequests.status FROM rideRequests INNER JOIN rideOffers ON rideRequests.ride_id = rideOffers.ride_id WHERE rideRequests.client_id = '{}'" .format(
+            client_id)
+    )
+    requests = cursor.fetchall()
+    if not requests:
+        return {"message": "No requests exist"}
+    return requests
+
 
 """end of line"""

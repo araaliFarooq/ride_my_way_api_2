@@ -3,7 +3,7 @@ from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.validate import FieldValidation
 from app.models import RideOffer, RideRequest
-from app.db.db_functions import add_new_offer, get_user_by_username, get_all_ride_offers, get_rideoffer_details, get_requests_to_rideOffer, send_ride_request, handle_ride_request
+from app.db.db_functions import add_new_offer, get_user_by_username, get_all_ride_offers, get_rideoffer_details, get_requests_to_rideOffer, send_ride_request, handle_ride_request, get_requests_status
 import datetime
 
 validate = FieldValidation()
@@ -66,7 +66,7 @@ class ViewAllOffers(MethodView):
     def get(self):
         """function to get all offers"""
         all_offers = get_all_ride_offers()
-        return jsonify({"All Offers": all_offers})
+        return jsonify({"All Offers": all_offers}), 200
 
 
 class GetRideOfferDetails(MethodView):
@@ -163,6 +163,18 @@ class HandleRideRequest(MethodView):
         return jsonify({"Request": status}), 200
 
 
+class GetRequestStatus(MethodView):
+    """function to get a request status"""
+    @jwt_required
+    def get(self):
+        loggedin_user = get_jwt_identity()
+        user = get_user_by_username(loggedin_user)
+        client_id = user[0]
+        status = get_requests_status(client_id=client_id)
+        return jsonify({"Request Status": status}), 200
+
+
+get_request_status_view = GetRequestStatus.as_view('get_request_status_view')
 create_offer_view = CreateOffer.as_view('create_offer_view')
 view_offers_view = ViewAllOffers.as_view('view_offers_view')
 get_offerdetails_view = GetRideOfferDetails.as_view('get_offerdetails_view')
@@ -173,6 +185,9 @@ handle_ride_request_view = HandleRideRequest.as_view(
     'handle_ride_request_view')
 
 # endpoint to create ride offes
+ride_blueprint.add_url_rule(
+    '/api/v1/requests/status', view_func=get_request_status_view, methods=['GET'])
+
 ride_blueprint.add_url_rule(
     '/api/v1/rides/create_offer', view_func=create_offer_view, methods=['POST'])
 
