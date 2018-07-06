@@ -44,7 +44,7 @@ First clone the repository
 #### Endpoints to create a user account and login into the application
 HTTP Method|End point | Public Access|Action
 -----------|----------|--------------|------
-POST | /api/v1/user/register | True | Create an account
+POST | /api/v1/user/register | True | Create a user account
 POST | /api/v1/user/login | True | Login a user
 
 #### Endpoints to create, read user ride offers and requests
