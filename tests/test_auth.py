@@ -42,7 +42,7 @@ class Test_auth(unittest.TestCase):
         """ Test for empty password validation """
         response = self.app.post("/api/v1/user/register",
                                  content_type='application/json',
-                                 data=json.dumps(dict(firstName="shakira", secondName="kyra", userName="kyooq",
+                                 data=json.dumps(dict(firstName="Natie", secondName="kyra", userName="kyooq",
                                                       contact="0888887676", user_category="driver", password="", car_type="rover", reg_num="uab1234", lic_num="4567789999"),)
                                  )
         reply = json.loads(response.data)
@@ -55,7 +55,7 @@ class Test_auth(unittest.TestCase):
         response = self.app.post(
             "/api/v1/user/register",
             content_type='application/json',
-            data=json.dumps(dict(firstName="shakira", secondName="kyra", userName="",
+            data=json.dumps(dict(firstName="Natie", secondName="kyra", userName="",
                                  contact="0888887676", user_category="driver", password="xxxx", car_type="rover", reg_num="uab1234", lic_num="4567789999"),)
         )
         reply = json.loads(response.data)
@@ -68,7 +68,7 @@ class Test_auth(unittest.TestCase):
         response = self.app.post(
             "/api/v1/user/register",
             content_type='application/json',
-            data=json.dumps(dict(firstName="shakira", secondName="kyra", userName="araali",
+            data=json.dumps(dict(firstName="Natie", secondName="kyra", userName="araali",
                                  contact="", user_category="driver", password="xxxx", car_type="rover", reg_num="uab1234", lic_num="4567789999"),)
         )
         reply = json.loads(response.data)
@@ -81,7 +81,7 @@ class Test_auth(unittest.TestCase):
         response = self.app.post(
             "/api/v1/user/register",
             content_type='application/json',
-            data=json.dumps(dict(firstName="shakira", secondName="kyra", userName="araali",
+            data=json.dumps(dict(firstName="Natie", secondName="kyra", userName="araali",
                                  contact="0384464662", user_category="driver", password="xxxx", car_type="", reg_num="uab1234", lic_num="4567789999"),)
         )
         reply = json.loads(response.data)
@@ -94,7 +94,7 @@ class Test_auth(unittest.TestCase):
         response = self.app.post(
             "/api/v1/user/register",
             content_type='application/json',
-            data=json.dumps(dict(firstName="shakira", secondName="kyra", userName="araali",
+            data=json.dumps(dict(firstName="Natie", secondName="kyra", userName="araali",
                                  contact="0384464662", user_category="driver", password="xxxx", car_type="audi", reg_num="", lic_num="4567789999"),)
         )
         reply = json.loads(response.data)
@@ -107,7 +107,7 @@ class Test_auth(unittest.TestCase):
         response = self.app.post(
             "/api/v1/user/register",
             content_type='application/json',
-            data=json.dumps(dict(firstName="shakira", secondName="kyra", userName="araali",
+            data=json.dumps(dict(firstName="Natie", secondName="kyra", userName="araali",
                                  contact="0384464662", user_category="driver", password="xxxx", car_type="vitz", reg_num="uab1234", lic_num=""),)
         )
         reply = json.loads(response.data)
