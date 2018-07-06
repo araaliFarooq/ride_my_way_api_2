@@ -1,6 +1,6 @@
 env/
 .vscode/
-app/__pycache__/.
+app/__pycache__/.ar
 app/db/__pycache__/.
 app/db/__pycache__/.
 *pyc

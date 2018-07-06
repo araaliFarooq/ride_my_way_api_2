@@ -162,6 +162,7 @@ class HandleRideRequest(MethodView):
 
         return jsonify({"Request": status}), 200
 
+
 class GetRequestStatus(MethodView):
     """function to get a request status"""
     @jwt_required
@@ -169,7 +170,7 @@ class GetRequestStatus(MethodView):
         loggedin_user = get_jwt_identity()
         user = get_user_by_username(loggedin_user)
         client_id = user[0]
-        status = get_requests_status(client_id = client_id)
+        status = get_requests_status(client_id=client_id)
         return jsonify({"Request Status": status}), 200
 
 
