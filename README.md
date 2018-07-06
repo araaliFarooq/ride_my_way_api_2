@@ -1,7 +1,7 @@
 # ride_my_way_api_2
 
 [![Build Status](https://travis-ci.org/araaliFarooq/ride_my_way_api_2.svg?branch=master)](https://travis-ci.org/araaliFarooq/ride_my_way_api_2)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a606be0961af4491be9614153d1fa01d)](https://www.codacy.com/app/araaliFarooq/ride_my_way_api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=araaliFarooq/ride_my_way_api&amp;utm_campaign=Badge_Grade) 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/06dc688a05034adcbcb97c8ff47ac190)](https://www.codacy.com/app/araaliFarooq/ride_my_way_api_2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=araaliFarooq/ride_my_way_api_2&amp;utm_campaign=Badge_Grade)
 [![Coverage Status](https://coveralls.io/repos/github/araaliFarooq/ride_my_way_api_2/badge.svg?branch=master)](https://coveralls.io/github/araaliFarooq/ride_my_way_api_2?branch=master)
 
 
