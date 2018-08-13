@@ -6,14 +6,7 @@ from app import app
 
 class DBConnection:
     def __init__(self):
-        if app.config['TESTING']:
-            print("Testing")
-            self.con = psycopg2.connect(
-                database="apitests", user="postgres", password="12345", host="localhost", port="5432")
-        else:
-            print("Development")
-            self.con = psycopg2.connect(
-                database="farooq", user="postgres", password="12345", host="localhost", port="5432")
+        self.con = psycopg2.connect(database="farooq", user="postgres", password="12345", host="localhost", port="5432")
 
         self.con.autocommit = True
         self.cursor = self.con.cursor()
