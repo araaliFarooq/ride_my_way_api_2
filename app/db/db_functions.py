@@ -1,56 +1,102 @@
 """Functions to interact with the db"""
-from db.dbManager import DBConnection
+from app.db.dbManager import DBConnection
 
 connect = DBConnection()
 cursor = connect.cursor
 
-def add_new_client( firstName, secondName, userName, contact, password):
-        create_new_user_command = ("INSERT INTO clients VALUES ('{}', '{}', '{}', '{}', '{}')" .format(firstName, secondName, userName, contact, password))
-        cursor.execute(create_new_user_command)
 
-def add_new_driver(firstName, secondName, userName, contact, carType, reg_num, lic_num, password):
-        create_new_user_command = ("INSERT INTO drivers VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')" .format(firstName, secondName, userName, contact, carType, reg_num, lic_num, password))
-        cursor.execute(create_new_user_command)       
+def add_new_client(firstName, secondName, userName, contact, password):
+    query = (
+        """INSERT INTO clients (firstName,secondName,userName,contact,password) VALUES ('{}', '{}', '{}', '{}', '{}')""".
+        format(firstName, secondName, userName, contact, password))
+    cursor.execute(query)
 
-def get_user_by_username(username):  
-         cursor.execute("SELECT * from clients where userName = '{}'" .format(username))
-         userName = cursor.fetchone()
-         if userName == None:
-                 cursor.execute("SELECT * from drivers where userName = '{}'" .format(username))
-                 userName = cursor.fetchone()
-                 return userName
-         else:
-                return userName        
 
-# def create_new_request(self, request_id, title, desc, requester_name, request_status):
-#         create_new_request_command = ("INSERT INTO USER_REQUESTS VALUES ('{}', '{}', '{}', '{}', '{}')" .format(request_id, title, desc, requester_name, request_status))
-#         self.cursor.execute(create_new_request_command)
+def add_new_driver(firstName, secondName, userName, contact, carType, reg_num,
+                   lic_num, password):
+    query = (
+        """INSERT INTO drivers (firstName,secondName,userName,contact,carType, regNumber, licNumber,password) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')""".
+        format(firstName, secondName, userName, contact, carType, reg_num,
+               lic_num, password))
+    cursor.execute(query)
 
-# def get_a_single_user_request(self, request_id):
-#         """ function to retrieve a single request from the database for a logged in user"""
-#         self.cursor.execute("SELECT * FROM user_requests WHERE request_id = '{}'" .format(request_id))
-#         req = self.cursor.fetchall()
-#         if not req:
-#             return {"msg": "request doesn't exist"}
-#         return req
 
-# def get_a_user_requests(self, username):
-#         """ function to fetch all requests for a signed in user """
-#         self.cursor.execute("SELECT * FROM user_requests WHERE request_owner = '{}'" .format(username))
-#         req = self.cursor.fetchall()
-#         if not req:
-#             return {"msg": "No requests yet"}
-#         return req
-        
-# def update_user_request(self, title, desc, request_id):
-#         update_command = ("UPDATE user_requests SET request_title='{}', request_desc='{}' where request_id='{}'" .format(title, desc, int(request_id)))
-#         self.cursor.execute(update_command)
+def get_user_by_username(username):
+    query = ("""SELECT * from clients where userName = '{}'""".format(username))
+    cursor.execute(query)
+    userName = cursor.fetchone()
+    if userName == None:
+        query = (
+            """SELECT * from drivers where userName = '{}'""".format(username))
+        cursor.execute(query)
+        userName = cursor.fetchone()
+        return userName
+    else:
+        return userName
 
-# def get_all_app_requests(self):
-#         self.cursor.execute("SELECT * from user_requests")
-#         all_rows = self.cursor.fetchall()
-#         return all_rows
 
-# def update_request_status(self, request_id, request_status):
-#         update_command = ("UPDATE user_requests SET request_status='{}' where request_id='{}'" .format(request_status, int(request_id)))
-#         self.cursor.execute(update_command)
+def add_new_offer(driver_id, date, driverName, location, carType, plateNumber,
+                  contact, availability, costPerKm):
+    """function to add a new ride offer"""
+    query = (
+        """INSERT INTO rideOffers (driver_id, date, driverName, location, carType, plateNumber, contact, availability, costPerKm) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')""".
+        format(driver_id, date, driverName, location, carType, plateNumber,
+               contact, availability, costPerKm))
+    cursor.execute(query)
+
+
+def get_all_ride_offers():
+    """function to get all registered offers"""
+    cursor.execute("SELECT * from rideOffers")
+    all_offers = cursor.fetchall()
+    return all_offers
+
+
+def get_rideoffer_details(ride_id):
+    """ function to get details of a ride offer"""
+    cursor.execute(
+        "SELECT * FROM rideOffers WHERE ride_id = '{}'" .format(ride_id))
+    rows = cursor.fetchone()
+    if not rows:
+        return {"message": "Offer doesn't exist"}
+    return rows
+
+
+def get_requests_to_rideOffer(ride_id):
+    """ function to get requests to a ride offer """
+    cursor.execute(
+        "SELECT * FROM rideRequests WHERE ride_id = '{}'" .format(ride_id))
+    requests = cursor.fetchall()
+    if not requests:
+        return {"message": "No requests exist"}
+    return requests
+
+
+def send_ride_request(date, ride_id, client_id, client_name, client_contact, location, destination, status):
+    """function to submit a request made for a ride"""
+    query = (
+        """INSERT INTO rideRequests (date, ride_id, client_id, client_name, client_contact, location, destination, status) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')""".
+        format(date, ride_id, client_id, client_name, client_contact, location, destination, status))
+    cursor.execute(query)
+
+
+def handle_ride_request(status, request_id, ride_id):
+    """function to accept or reject ride requests"""
+    query = ("""UPDATE rideRequests SET status = '{}' where request_id = '{}' and ride_id = '{}'""" .format(
+        status, request_id, ride_id))
+    cursor.execute(query)
+
+
+def get_requests_status(client_id):
+    """ function to get requests status """
+    cursor.execute(
+        "SELECT rideRequests.date, rideRequests.location, rideRequests.destination, rideOffers.driverName, rideOffers.carType, rideOffers.plateNumber, rideOffers.contact, rideRequests.status FROM rideRequests INNER JOIN rideOffers ON rideRequests.ride_id = rideOffers.ride_id WHERE rideRequests.client_id = '{}'" .format(
+            client_id)
+    )
+    requests = cursor.fetchall()
+    if not requests:
+        return {"message": "No requests exist"}
+    return requests
+
+
+"""end of line"""

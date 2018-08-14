@@ -1,4 +1,9 @@
-venv/
+env/
 .vscode/
-app/__pycache__/views.cpython-35.pyc
-app/db/__pycache__/g
+app/__pycache__/.ar
+app/db/__pycache__/.
+app/db/__pycache__/.
+*pyc
+tests/__pycache__/.
+.pytest_cache/.
+__pycache__/.
